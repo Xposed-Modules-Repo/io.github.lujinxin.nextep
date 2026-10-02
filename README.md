@@ -30,6 +30,13 @@ NeXtep is an open-source Xposed module providing a multi-app workspace for Andro
 3. Select the required module scope.
 4. Restart the device.
 
+### Usage
+
+After enabling the module and rebooting, unlock the device. You can open or close the workspace in either of two ways:
+
+- **Gesture:** swipe horizontally to the left from the top-right status-bar area. Swiping down opens the system notification shade or Control Center as usual.
+- **Control Center toggle:** open the NeXtep app, tap **添加 NeXtep 到控制中心** (Add NeXtep to Control Center), and confirm. Then pull down Control Center and tap the **NeXtep** tile to toggle the workspace. If the tile cannot be added from the app, add it from Control Center's edit screen.
+
 [Source code and detailed documentation](https://github.com/lujinxin/NeXtep)
 
 ---
@@ -63,5 +70,12 @@ NeXtep 是一款适用于 Android 16 / ColorOS 16 的开源 Xposed 模块，提�
 2. 在 LSPosed 中启用 NeXtep。
 3. 按模块要求选择作用域。
 4. 重启设备。
+
+### 使用方法
+
+启用模块并重启设备后，在解锁状态下，可通过以下两种方式打开或关闭工作区：
+
+- **手势**：从屏幕右上角的状态栏区域水平向左滑动。向下滑动仍然按系统原有方式打开通知栏或控制中心。
+- **控制中心开关**：打开 NeXtep 应用，点击 **“添加 NeXtep 到控制中心”** 并确认添加。随后下拉控制中心，点击 **NeXtep** 开关即可切换工作区的开启或关闭状态。如果应用内添加失败，可在控制中心的编辑页面手动添加 NeXtep 开关。
 
 [源码与详细使用说明](https://github.com/lujinxin/NeXtep)
