@@ -6,7 +6,7 @@ NeXtep is an open-source Xposed module providing a multi-app workspace for Andro
 
 ### Demo video
 
-[Watch the NeXtep demo on Bilibili](https://www.bilibili.com/video/BV1mPYd6XEU8/)
+[Watch the NeXtep demo on Bilibili](https://www.bilibili.com/video/BV1iKHj6fEtL/)
 
 ### Features
 
@@ -47,7 +47,7 @@ NeXtep 是一款适用于 Android 16 / ColorOS 16 的开源 Xposed 模块，提�
 
 ### 演示视频
 
-[在哔哩哔哩观看 NeXtep 演示视频](https://www.bilibili.com/video/BV1mPYd6XEU8/)
+[在哔哩哔哩观看 NeXtep 演示视频](https://www.bilibili.com/video/BV1iKHj6fEtL/)
 
 ### 功能
 
