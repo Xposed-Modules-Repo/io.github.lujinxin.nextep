@@ -39,6 +39,10 @@ After enabling the module and rebooting, unlock the device. You can open or clos
 
 [Source code and detailed documentation](https://github.com/lujinxin/NeXtep)
 
+### Feedback group
+
+QQ group: **1128561895**
+
 ---
 
 ## 中文
@@ -79,3 +83,7 @@ NeXtep 是一款适用于 Android 16 / ColorOS 16 的开源 Xposed 模块，提�
 - **控制中心开关**：打开 NeXtep 应用，点击 **“添加 NeXtep 到控制中心”** 并确认添加。随后下拉控制中心，点击 **NeXtep** 开关即可切换工作区的开启或关闭状态。如果应用内添加失败，可在控制中心的编辑页面手动添加 NeXtep 开关。
 
 [源码与详细使用说明](https://github.com/lujinxin/NeXtep)
+
+### 反馈交流群
+
+QQ 群号：**1128561895**
