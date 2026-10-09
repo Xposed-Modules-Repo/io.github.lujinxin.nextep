@@ -2,7 +2,7 @@
 
 ## English
 
-NeXtep is an open-source Xposed module providing a multi-app workspace for Android 16 / ColorOS 16.
+NeXtep is an open-source Xposed module providing a multi-app workspace for Android 16-17 / ColorOS 16-17.
 
 ### Demo video
 
@@ -18,7 +18,7 @@ NeXtep is an open-source Xposed module providing a multi-app workspace for Andro
 
 ### Requirements
 
-- Android 16 / ColorOS 16
+- Android 16-17 / ColorOS 16-17
 - Root access
 - Zygisk and LSPosed installed
 - Primarily tested on OnePlus PLK110
@@ -47,7 +47,7 @@ QQ group: **1128561895**
 
 ## 中文
 
-NeXtep 是一款适用于 Android 16 / ColorOS 16 的开源 Xposed 模块，提供多应用工作区。
+NeXtep 是一款适用于 Android 16-17 / ColorOS 16-17 的开源 Xposed 模块，提供多应用工作区。
 
 ### 演示视频
 
@@ -63,7 +63,7 @@ NeXtep 是一款适用于 Android 16 / ColorOS 16 的开源 Xposed 模块，提�
 
 ### 使用要求
 
-- Android 16 / ColorOS 16
+- Android 16-17 / ColorOS 16-17
 - Root 权限
 - 已安装 Zygisk 和 LSPosed
 - 当前主要在 OnePlus PLK110 上测试
