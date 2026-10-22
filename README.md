@@ -77,6 +77,16 @@ The optional **Park the previous main app when switching** setting moves the pre
 - Tap the artwork, title, or another area outside the playback buttons to open the playback app in the main window. If it occupies a slot, it exchanges with the main window.
 - Use a soft gradient drawn from the track artwork, retaining the colors while paused. With no media session or usable artwork, the card falls back to frosted wallpaper.
 
+#### Control-area video
+
+**NeXtep 2.0.0** adds a video page alongside the control area's **Controls** page. Supported floating video windows are detected and displayed automatically. System picture-in-picture (PiP) and app-provided floating video windows are supported; compatibility with OEM freeform windows and protected video depends on the app and system.
+
+1. Start playback in the source app and enable system PiP or the app's own floating video window.
+2. Open the workspace. A supported floating window automatically moves into the **Video** page.
+3. Swipe left or right across the control area to switch between **Controls** and **Video**. If the window remains outside, use the video shortcut on **Controls** or tap **Show video here** on **Video**.
+
+Video keeps its original aspect ratio, stays horizontally centered, and reaches the top edge of the screen using the status-bar area. The source app continues to handle playback. Tap the video to temporarily show **Return to floating window**, or use the return shortcut on **Controls**, to restore the original window. The button hides automatically to keep the picture clear. Locking the device or closing the workspace also restores the native window; a manually returned window stays outside after unlocking until it is captured again.
+
 #### Appearance and text
 
 The control area and slot backgrounds use the wallpaper, including adaptations for ColorOS live wallpaper. Frosting leaves app content sharp.
@@ -245,6 +255,16 @@ Copyright 2026 lujinxin.
 - 从系统媒体会话中显示歌曲封面、标题和歌手信息，提供**上一首、播放／暂停、下一首**按钮，具体可用操作取决于播放应用。
 - 点击封面、标题等非播放按钮区域，在主窗口打开播放应用；如果播放应用已在小窗中，则与主窗口交换。
 - 有可用封面时，自动生成柔和的封面取色渐变，暂停时保留配色；没有媒体会话或可用封面时，回退到壁纸磨砂背景。
+
+#### 控制区视频
+
+**NeXtep 2.0.0** 在控制区的**“功能”**页之外加入**“视频”**页，可自动识别并接入支持的悬浮视频小窗。支持系统画中画（PiP）和应用自行提供的视频悬浮窗；厂商自由小窗和受保护视频的兼容性取决于应用与系统。
+
+1. 先在来源应用中播放视频，并开启系统画中画或应用自己的悬浮小窗。
+2. 打开工作区，支持的悬浮小窗会自动接入**“视频”**页。
+3. 在控制区左右滑动，切换**“功能”**页与**“视频”**页。如果小窗仍在外部，可点击功能页的视频快捷按钮，或在视频页点击**“在此显示视频”**。
+
+视频保持原始比例、水平居中显示，利用状态栏空间贴合屏幕顶部，避免拉伸。播放仍由来源应用负责。轻点视频可临时显示**“返回原小窗”**按钮，也可通过功能页的返回快捷按钮恢复原小窗；返回按钮会自动隐藏，减少画面遮挡。锁屏或退出工作区时，也会归还原悬浮窗；手动返回的小窗在解锁后保持在外部，直到再次接入。
 
 #### 外观与文字
 
