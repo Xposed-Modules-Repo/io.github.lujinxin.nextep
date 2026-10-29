@@ -32,9 +32,11 @@
 
 The project primarily targets **OnePlus PLK110**, previously verified on **Android 16 / ColorOS 16**. Recent feature and compatibility testing is based on **Android 17 / ColorOS 17**. It relies on private Android and ColorOS behavior, so **other devices, ROM versions, and vendor launchers require adaptation**.
 
+**Stable channel: 2.1.0.** Development builds are maintained on [beta](https://github.com/lujinxin/NeXtep/tree/beta); published APKs are available from GitHub Releases.
+
 [Download and release notes](https://github.com/Xposed-Modules-Repo/io.github.lujinxin.nextep/releases) · [Demo video on Bilibili](https://www.bilibili.com/video/BV1iKHj6fEtL)
 
-[Features](#features) · [Requirements](#requirements) · [Installation](#installation) · [Workspace controls](#open-and-close-the-workspace) · [External commands](#external-commands) · [Behavior switches](#behavior-switches)
+[Features](#features) · [Energy monitoring](#energy-monitoring-and-resource-use) · [Requirements](#requirements) · [Installation](#installation) · [Workspace controls](#open-and-close-the-workspace) · [External commands](#external-commands) · [Behavior switches](#behavior-switches)
 
 ### Features
 
@@ -43,7 +45,7 @@ The project primarily targets **OnePlus PLK110**, previously verified on **Andro
 - **Stock launcher:** keeps the ColorOS launcher without registering a replacement HOME app, with adaptations for launcher shortcut menus, desktop search, and the assistant panel.
 - **One main window and three live slots:** keep several app tasks visible together and move whole tasks between the main window and slots.
 - **Left and right layouts:** switch the slot sidebar using the layout buttons in the control area.
-- **Portrait and both landscape orientations:** keep the controls at the phone's physical top while the main app follows the landscape direction. The controls and three slots remain available during landscape video playback.
+- **Portrait and both landscape orientations:** keep the control area and three slots in their layout relative to the phone while the main app follows system rotation. The embedded video can follow the screen direction independently, without moving the control area or rebuilding the slot layout.
 - **Navigation-button adaptation:** optionally fit the main window and slots around the system navigation bar. Enable it for three-button navigation and disable it for gesture navigation; after changing the system navigation mode, toggle the option again.
 - **Task retention:** restore eligible slot tasks that remain in the system when closing and reopening the workspace. Locking pauses slot output; unlocking restores the workspace with its tasks.
 - **System integration:** coexists with native floating windows above the workspace panels, and includes adaptations for keyboard focus, notification shade and Control Center interaction, brightness controls, and video-window sizing.
@@ -71,6 +73,14 @@ The optional **Park the previous main app when switching** setting moves the pre
 - **Manual ordering:** choose up to **36 apps**, remove shortcuts, and long-press selected entries to reorder them.
 - **System app clones:** show cloned apps in the app strip and manual selection list, with clone labels to distinguish them from the original apps.
 
+#### Gestures and app exclusions
+
+- **Four-finger gesture:** pinch four fingers together to enter the workspace and spread them apart to exit. It is enabled by default and can be switched independently of the status-bar gesture.
+- **Game exclusion:** enabled by default. Four-finger gestures are suspended when a system-recognized game is in the foreground or any workspace slot.
+- **App blacklist:** select apps by icon and name, with a checkbox on the right. Four-finger gestures are suspended while a selected app or its system clone is in the foreground or a slot. The list is empty by default.
+
+These exclusions apply to the four-finger gesture. Other workspace entry points remain available.
+
 #### Media controls
 
 - Display track artwork, title, and artist information from the active system media session, with **previous**, **play/pause**, and **next** controls as supported by the playback app.
@@ -79,13 +89,41 @@ The optional **Park the previous main app when switching** setting moves the pre
 
 #### Control-area video
 
-**NeXtep 2.0.0** adds a video page alongside the control area's **Controls** page. Supported floating video windows are detected and displayed automatically. System picture-in-picture (PiP) and app-provided floating video windows are supported; compatibility with OEM freeform windows and protected video depends on the app and system.
+The control area has a **Video** page alongside **Controls**. Supported floating video windows are detected and displayed automatically, with playback remaining in the source app. The supported sources are system picture-in-picture (PiP) and eligible app-provided floating video windows; OEM freeform windows and secure/protected video are not generally supported.
 
 1. Start playback in the source app and enable system PiP or the app's own floating video window.
 2. Open the workspace. A supported floating window automatically moves into the **Video** page.
 3. Swipe left or right across the control area to switch between **Controls** and **Video**. If the window remains outside, use the video shortcut on **Controls** or tap **Show video here** on **Video**.
 
-Video keeps its original aspect ratio, stays horizontally centered, and reaches the top edge of the screen using the status-bar area. The source app continues to handle playback. Tap the video to temporarily show **Return to floating window**, or use the return shortcut on **Controls**, to restore the original window. The button hides automatically to keep the picture clear. Locking the device or closing the workspace also restores the native window; a manually returned window stays outside after unlocking until it is captured again.
+Tap the embedded video to show compact glass controls. They hide automatically after a short delay.
+
+| Control | Behavior |
+|---------|----------|
+| Play / pause | Use the source app's media session or an available native player control. Availability depends on the player. |
+| Show full picture / Fill area | Default to uniform scaling with the complete picture centered in both axes. Choose fill explicitly to crop the edges and cover the area. |
+| Return to floating window | Restore the original native window. The return shortcut on **Controls** provides the same action. |
+| Close | Request the source player's own close action when available. |
+
+- **Independent orientation:** the control area stays in place while the picture follows the current system display direction. With the phone held sideways, the control region appears tall: a portrait picture can use that space, while a landscape picture remains upright and gets space above and below when needed. System rotation lock is respected.
+- **Retained embedding:** a rotation keeps the same valid native window embedded, rather than returning it to a floating window and capturing it again. Rotation also keeps the selected full-picture/fill mode.
+- **Frosted surrounding area:** unused space shows the panel's wallpaper and frost effect. Black bars already drawn by the source player remain part of its picture; they are not detected or removed automatically.
+
+Locking the device or closing the workspace restores the native window. A manually returned window stays outside after unlocking until it is captured again.
+
+#### Energy monitoring and resource use
+
+Open **Advanced → Runtime and diagnostics → Energy monitor** to view live readings and copy a report.
+
+| Readings | Included information |
+|----------|----------------------|
+| Device battery | Battery level, temperature and temperature change, charge state, voltage, current, estimated net battery power, average discharge power from unplugged samples, thermal status, and power-saving mode. |
+| Workspace runtime | Workspace state, retained slot displays, aggregate slot frame updates, module task queries and preview captures, and overall SystemUI host CPU usage. |
+
+Sampling runs every **5 seconds** while this page is visible and the device is unlocked. Leaving the page or locking the device stops sampling. Unsupported readings appear as **—**.
+
+Battery readings describe the whole device; charging power is not the device's total consumption. CPU usage covers the entire shared SystemUI process, with 100% representing one CPU core. These readings cannot isolate NeXtep's own battery consumption.
+
+The workspace reduces idle task polling, combines pending refreshes, and avoids redundant preview captures. Retained slot displays request **60 Hz** independently of the physical screen's refresh rate. Slot output and task polling are suspended while locked, and the retained workspace resumes after unlocking.
 
 #### Appearance and text
 
@@ -100,10 +138,12 @@ The control area and slot backgrounds use the wallpaper, including adaptations f
 | Font | Search, preview, and select fonts installed on the device, or choose a generic font family. System default follows the device's font setting. |
 | Text size and weight | **10–28 sp**, default **16 sp**, with optional bold styling and an input preview. |
 | Frost strength | **0–100**, default **50**. Release the slider to save and apply the value to the control area and slot backgrounds. |
+| Launcher icon | Choose default, spring, summer, autumn, winter, or dark artwork, or switch automatically with the season. System dark mode or power-saving mode temporarily uses the dark icon. Icon changes preserve its launcher position. |
 
 #### Settings, languages, and updates
 
-- **Settings / Advanced / About:** use bottom navigation to switch between workspace settings, external-control commands, and project information. The settings interface follows the system's light or dark theme and uses a liquid-glass bottom navigation bar.
+- **Settings / Advanced / About:** use bottom navigation to switch between workspace settings, runtime diagnostics and external-control commands, and project information. The settings interface follows the system's light or dark theme and uses a liquid-glass bottom navigation bar.
+- **Advanced page groups:** separate **Runtime and diagnostics** from **Shell commands**, with energy monitoring, command prerequisites, copy buttons, and setup instructions in their respective sections.
 - **Languages:** follow the system or select **Simplified Chinese, Traditional Chinese, English, Japanese, or Korean** for the app and workspace.
 - **Settings shortcut:** tap the control area's gear button to open NeXtep settings while keeping workspace mode active.
 - **About:** view the installed version, check for updates, open release and source pages, and read license information and acknowledgements.
@@ -134,6 +174,7 @@ Testing has not covered every app or edge case. Other devices and ROMs require s
 After enabling the module and rebooting, unlock the device. Use any of these entry points:
 
 - **Status-bar gesture:** swipe horizontally to the left from the top-right status-bar area. Swiping down still opens the system notification shade or Control Center. The gesture is enabled by default and can be disabled independently.
+- **Four-finger gesture:** pinch to enter and spread to exit. The independent switch, game exclusion, and app blacklist are on the **Settings** page.
 - **Control Center tile:** in NeXtep's Settings, tap **Add** in the **Control Center entry** row and confirm. Pull down Control Center and tap **NeXtep** to toggle the workspace. If adding it from the app fails, use Control Center's edit screen.
 - **External commands:** copy commands from the **Advanced** page into a gesture, shortcut, automation, or terminal tool; see below.
 - **Exit button:** tap the exit button in the workspace control area to return to fullscreen.
@@ -169,6 +210,8 @@ These switches are on the **Settings** page; appearance and app ordering are des
 | Setting | Default | Behavior |
 |---------|---------|----------|
 | Status-bar gesture | On | Enable or disable the top-right horizontal gesture. The Control Center tile remains available. |
+| Four-finger gesture | On | Pinch four fingers together to enter and spread them apart to exit. |
+| Block gestures in games | On | Suspend four-finger gestures when a recognized game is in the foreground or a slot. App blacklist exclusions can be configured separately. |
 | Swipe slot apps to the background | On | Enable or disable outward swipe dismissal. Dragging a slot to the control area remains available. |
 | Park the previous main app when switching | Off | Move the previous main app into an empty slot when switching from the app strip; switch normally if none is available. |
 | Navigation-button adaptation | Off | Enable for three-button navigation and disable for gesture navigation. Toggle again after changing the system navigation mode. |
@@ -211,9 +254,11 @@ Copyright 2026 lujinxin.
 
 本项目主要适配**一加 PLK110**，此前已在 **Android 16 / ColorOS 16** 上验证，近期功能与兼容性验证基于 **Android 17 / ColorOS 17**。项目依赖 Android 和 ColorOS 的私有行为，因此**其他设备、系统版本和厂商桌面需要经过适配**。
 
+**正式分支：2.1.0。** 测试版源码位于 [beta](https://github.com/lujinxin/NeXtep/tree/beta)，已发布的 APK 可从 GitHub Releases 获取。
+
 [下载与更新记录](https://github.com/Xposed-Modules-Repo/io.github.lujinxin.nextep/releases) · [哔哩哔哩演示视频](https://www.bilibili.com/video/BV1iKHj6fEtL)
 
-[功能](#功能) · [使用要求](#使用要求) · [安装](#安装) · [工作区入口](#打开与关闭工作区) · [外部命令](#外部调用命令) · [行为开关](#行为开关)
+[功能](#功能) · [能耗监测](#能耗监测与运行开销) · [使用要求](#使用要求) · [安装](#安装) · [工作区入口](#打开与关闭工作区) · [外部命令](#外部调用命令) · [行为开关](#行为开关)
 
 ### 功能
 
@@ -222,7 +267,7 @@ Copyright 2026 lujinxin.
 - **保留原生桌面**：不将 NeXtep 注册为替代的主屏幕应用，并对桌面快捷菜单、桌面搜索和负一屏进行适配。
 - **一个主窗口、三个实时小窗**：同时展示多个应用任务，可在主窗口与小窗之间移动整个任务。
 - **左右侧布局**：通过控制区的布局按钮，将小窗侧栏切换到屏幕左侧或右侧。
-- **竖屏与双向横屏**：控制区保持在手机物理顶部，主窗口应用随横屏方向旋转；横屏视频播放时仍保留控制区和三个小窗。
+- **竖屏与双向横屏**：控制区和三个小窗保持相对机身的原有布局，主窗口应用随系统方向旋转；控制区内的视频画面可独立跟随屏幕方向，无需移动控制区或重建小窗布局。
 - **虚拟按键适配**：可根据系统导航栏边界调整主窗与小窗布局。三键导航时开启，手势导航时关闭；更改系统导航方式后，重新开关一次此选项。
 - **任务保留与恢复**：关闭并重新打开工作区时，可恢复仍保留在系统中的符合条件的小窗任务；锁屏时暂停小窗输出，解锁后恢复工作区及原有任务。
 - **系统交互适配**：支持与系统原生悬浮窗共存，原生悬浮窗位于工作区面板上方；同时适配输入法焦点、通知栏、控制中心、亮度控件和视频窗口尺寸。
@@ -250,21 +295,57 @@ Copyright 2026 lujinxin.
 - **手动排序**：最多选择 **36 个应用**，支持移除快捷方式，并长按已选项目拖动调整顺序。
 - **系统分身应用**：分身应用可出现在 App 栏和手动选择列表中，通过分身标记与原应用区分。
 
+#### 手势与应用排除
+
+- **四指手势**：四指捏合进入工作区，四指张开退出；默认开启，可独立于状态栏手势开关。
+- **游戏屏蔽**：默认开启，系统识别的游戏处于前台或任一小窗中时，暂停四指手势。
+- **应用黑名单**：通过应用图标和名称选择，右侧勾选；所选应用或其系统分身处于前台或小窗中时，暂停四指手势。黑名单默认为空。
+
+这些排除设置仅影响四指手势，其他工作区入口仍可使用。
+
 #### 媒体控制
 
-- 从系统媒体会话中显示歌曲封面、标题和歌手信息，提供**上一首、播放／暂停、下一首**按钮，具体可用操作取决于播放应用。
+- 从系统媒体会话中显示歌曲封面、标题和歌手信息，提供**上一首、播放/暂停、下一首**按钮，具体可用操作取决于播放应用。
 - 点击封面、标题等非播放按钮区域，在主窗口打开播放应用；如果播放应用已在小窗中，则与主窗口交换。
 - 有可用封面时，自动生成柔和的封面取色渐变，暂停时保留配色；没有媒体会话或可用封面时，回退到壁纸磨砂背景。
 
 #### 控制区视频
 
-**NeXtep 2.0.0** 在控制区的**“功能”**页之外加入**“视频”**页，可自动识别并接入支持的悬浮视频小窗。支持系统画中画（PiP）和应用自行提供的视频悬浮窗；厂商自由小窗和受保护视频的兼容性取决于应用与系统。
+控制区包含**“功能”**和**“视频”**两页，可自动识别并接入支持的悬浮视频小窗，播放仍由来源应用负责。接入来源包括系统画中画（PiP）和符合条件的应用自带视频悬浮窗；厂商自由小窗和安全/受保护视频不属于通用支持范围。
 
 1. 先在来源应用中播放视频，并开启系统画中画或应用自己的悬浮小窗。
 2. 打开工作区，支持的悬浮小窗会自动接入**“视频”**页。
 3. 在控制区左右滑动，切换**“功能”**页与**“视频”**页。如果小窗仍在外部，可点击功能页的视频快捷按钮，或在视频页点击**“在此显示视频”**。
 
-视频保持原始比例、水平居中显示，利用状态栏空间贴合屏幕顶部，避免拉伸。播放仍由来源应用负责。轻点视频可临时显示**“返回原小窗”**按钮，也可通过功能页的返回快捷按钮恢复原小窗；返回按钮会自动隐藏，减少画面遮挡。锁屏或退出工作区时，也会归还原悬浮窗；手动返回的小窗在解锁后保持在外部，直到再次接入。
+轻点已接入的视频可显示紧凑的玻璃控制按钮，短暂延迟后自动隐藏。
+
+| 控件 | 行为 |
+|------|------|
+| 播放/暂停 | 使用来源应用的媒体会话或可用的原生播放控件，是否可用取决于播放器。 |
+| 完整显示/铺满 | 默认等比缩放，在两个方向上居中显示完整画面；手动选择铺满时裁切边缘以覆盖播放区域。 |
+| 返回原小窗 | 恢复原来的原生悬浮窗，功能页的返回快捷按钮提供相同操作。 |
+| 关闭 | 在可用时，请求来源播放器自身执行关闭操作。 |
+
+- **画面独立转向**：控制区保持原位，视频画面跟随系统当前屏幕方向。手机横拿后，控制区在视线上变成竖向区域，竖屏画面可利用这块区域；横屏画面保持正向，按需在上下留边，并遵守系统旋转锁定。
+- **保持接入**：同一个有效的原生窗口在转屏时持续嵌入，不再先返回悬浮窗后重新捕获；转屏也会保留所选的完整显示/铺满模式。
+- **磨砂留边**：画面外的空余区域继续使用面板壁纸和磨砂效果。来源播放器自身绘制的黑边仍属于原始画面，不会被自动识别和去除。
+
+锁屏或退出工作区时，会归还原悬浮窗。手动返回的小窗在解锁后保持在外部，直到再次接入。
+
+#### 能耗监测与运行开销
+
+在**“高级 → 运行与诊断 → 能耗监测”**中查看实时读数，并可复制监测报告。
+
+| 读数分组 | 包含信息 |
+|----------|----------|
+| 整机电池 | 电量、温度及温差、充放电状态、电压、电流、估算净功率、未插电采样的平均放电功率、系统热状态与省电模式。 |
+| 小窗运行 | 工作区状态、保留的小窗显示数、小窗帧更新合计、模块任务查询与预览截图，以及 SystemUI 宿主整体 CPU 使用情况。 |
+
+仅在页面可见且手机已解锁时，每 **5 秒**采样一次；离开页面或锁屏后停止。不支持的读数显示为 **—**。
+
+电池读数反映整机情况，充电功率不等于整机功耗；CPU 读数包含共享 SystemUI 进程的全部工作，100% 表示占用一个 CPU 核心。这些读数不能单独计算 NeXtep 的耗电量。
+
+工作区降低空闲时的任务轮询频率，合并待处理刷新，减少重复预览抓取。小窗虚拟显示独立请求 **60Hz**，主屏刷新率仍由系统设置决定；锁屏时暂停小窗输出与任务轮询，解锁后恢复保留的工作区。
 
 #### 外观与文字
 
@@ -279,10 +360,12 @@ Copyright 2026 lujinxin.
 | 字体 | 搜索、预览并选择本机已安装字体，也可使用通用字体；系统默认跟随手机的字体设置。 |
 | 字号与粗体 | 字号范围 **10–28 sp**，默认 **16 sp**，支持粗体和输入预览。 |
 | 磨砂强度 | 范围 **0–100**，默认 **50**；松开滑块后保存并应用到控制区和小窗背景。 |
+| 桌面图标 | 可选择默认、春、夏、秋、冬、暗黑图案，或自动随季节切换；系统暗黑/省电模式下临时使用暗黑图标，更换时保留桌面上的图标位置。 |
 
 #### 设置、语言与更新
 
-- **设置／高级／关于**：通过底部导航切换工作区设置、外部调用命令和项目信息；设置界面跟随系统浅色／深色主题，底部导航提供液态玻璃效果。
+- **设置/高级/关于**：通过底部导航切换工作区设置、运行诊断与外部调用命令、项目信息；设置界面跟随系统浅色/深色主题，底部导航提供液态玻璃效果。
+- **高级页分组**：将**“运行与诊断”**和**“Shell 命令”**分开，分别提供能耗监测、命令使用前提、复制按钮及配置步骤。
 - **语言选择**：应用与工作区可跟随系统，或手动选择**简体中文、繁体中文、英语、日语、韩语**。
 - **设置快捷入口**：点击工作区控制区的齿轮按钮打开 NeXtep 设置，并保持小窗模式。
 - **关于页面**：查看已安装版本、检查更新、打开发布页面和源码，以及查看开源协议与致谢名单。
@@ -313,6 +396,7 @@ Copyright 2026 lujinxin.
 启用模块并重启设备后，在解锁状态下，可通过以下入口操作：
 
 - **状态栏手势**：从屏幕右上角的状态栏区域水平向左滑动；向下滑动仍按系统原有方式打开通知栏或控制中心。此手势默认开启，可独立关闭。
+- **四指手势**：捏合进入、张开退出；独立开关、游戏屏蔽与应用黑名单均可在**“设置”**页配置。
 - **控制中心开关**：在 NeXtep 设置页的**“控制中心入口”**一行点击**“添加”**并确认，随后下拉控制中心，点击 **NeXtep** 开关切换工作区状态。应用内添加失败时，可在控制中心编辑页面手动添加。
 - **外部命令**：在**“高级”**页复制命令，配置到手势、快捷操作、自动化或终端工具中，具体见下文。
 - **退出按钮**：点击工作区控制区的退出按钮，返回全屏模式。
@@ -348,6 +432,8 @@ settings get global nextep_workspace_active_v1
 | 设置项 | 默认值 | 行为 |
 |--------|--------|------|
 | 状态栏触发手势 | 开启 | 控制右上角水平滑动手势；关闭后仍可使用控制中心开关。 |
+| 四指手势 | 开启 | 四指捏合进入，四指张开退出。 |
+| 游戏中屏蔽手势 | 开启 | 系统识别的游戏处于前台或小窗时暂停四指手势，应用黑名单可单独配置。 |
 | 小窗 App 横滑退到后台 | 开启 | 控制向外侧滑动移入后台；关闭后仍可拖到控制区移入后台。 |
 | 顶栏切换时缩小原应用 | 关闭 | 从顶栏切换应用时，将原主窗口应用移入空小窗；没有空位时正常切换。 |
 | 虚拟按键适配 | 关闭 | 三键导航时开启，手势导航时关闭；更改系统导航方式后，重新开关一次。 |
