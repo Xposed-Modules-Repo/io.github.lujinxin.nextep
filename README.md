@@ -32,7 +32,7 @@
 
 The project primarily targets **OnePlus PLK110**, previously verified on **Android 16 / ColorOS 16**. Recent feature and compatibility testing is based on **Android 17 / ColorOS 17**. It relies on private Android and ColorOS behavior, so **other devices, ROM versions, and vendor launchers require adaptation**.
 
-**Stable channel: 2.1.0.** Development builds are maintained on [beta](https://github.com/lujinxin/NeXtep/tree/beta); published APKs are available from GitHub Releases.
+**Stable channel: 2.1.1.** Development builds are maintained on [beta](https://github.com/lujinxin/NeXtep/tree/beta); published APKs are available from GitHub Releases.
 
 [Download and release notes](https://github.com/Xposed-Modules-Repo/io.github.lujinxin.nextep/releases) · [Demo video on Bilibili](https://www.bilibili.com/video/BV1iKHj6fEtL)
 
@@ -254,7 +254,7 @@ Copyright 2026 lujinxin.
 
 本项目主要适配**一加 PLK110**，此前已在 **Android 16 / ColorOS 16** 上验证，近期功能与兼容性验证基于 **Android 17 / ColorOS 17**。项目依赖 Android 和 ColorOS 的私有行为，因此**其他设备、系统版本和厂商桌面需要经过适配**。
 
-**正式分支：2.1.0。** 测试版源码位于 [beta](https://github.com/lujinxin/NeXtep/tree/beta)，已发布的 APK 可从 GitHub Releases 获取。
+**正式分支：2.1.1。** 测试版源码位于 [beta](https://github.com/lujinxin/NeXtep/tree/beta)，已发布的 APK 可从 GitHub Releases 获取。
 
 [下载与更新记录](https://github.com/Xposed-Modules-Repo/io.github.lujinxin.nextep/releases) · [哔哩哔哩演示视频](https://www.bilibili.com/video/BV1iKHj6fEtL)
 
