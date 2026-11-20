@@ -21,18 +21,18 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/lujinxin/NeXtep/main/assets/screenshots/workspace-overview.jpg" alt="NeXtep workspace overview" width="17%">&nbsp;
   <img src="https://raw.githubusercontent.com/lujinxin/NeXtep/main/assets/screenshots/quick-settings.jpg" alt="NeXtep Quick Settings workspace" width="17%">&nbsp;
-  <img src="https://raw.githubusercontent.com/lujinxin/NeXtep/main/assets/screenshots/widgets-workspace.jpg" alt="NeXtep widgets workspace" width="17%">&nbsp;
+  <img src="https://raw.githubusercontent.com/lujinxin/NeXtep/main/assets/screenshots/recent-tasks.jpg" alt="NeXtep recent tasks page" width="17%">&nbsp;
   <img src="https://raw.githubusercontent.com/lujinxin/NeXtep/main/assets/screenshots/app-settings.jpg" alt="NeXtep app settings" width="17%">&nbsp;
   <img src="https://raw.githubusercontent.com/lujinxin/NeXtep/main/assets/screenshots/multitasking.jpg" alt="NeXtep multitasking workspace" width="17%">
 </p>
 
 ## English
 
-**NeXtep** is an **LSPosed module** that adds a **native side workspace** to ColorOS 16 / 17 while keeping the **stock launcher**. It provides **one main window and three live task slots**, with task switching, drag-and-drop, media controls, and customizable app shortcuts integrated into SystemUI.
+**NeXtep** is an **LSPosed module** that adds a **native side workspace** to ColorOS 16 / 17 while keeping the **stock launcher**. It provides **one main window and three live task slots**, with task switching, drag-and-drop, workspace monitoring, and customizable app shortcuts integrated into SystemUI.
 
 The project primarily targets **OnePlus PLK110**, previously verified on **Android 16 / ColorOS 16**. Recent feature and compatibility testing is based on **Android 17 / ColorOS 17**. It relies on private Android and ColorOS behavior, so **other devices, ROM versions, and vendor launchers require adaptation**.
 
-**Stable channel: 2.1.1.** Development builds are maintained on [beta](https://github.com/lujinxin/NeXtep/tree/beta); published APKs are available from GitHub Releases.
+**Stable channel: 2.2.0.** Development builds are maintained on [beta](https://github.com/lujinxin/NeXtep/tree/beta); published APKs are available from GitHub Releases.
 
 [Download and release notes](https://github.com/Xposed-Modules-Repo/io.github.lujinxin.nextep/releases) · [Demo video on Bilibili](https://www.bilibili.com/video/BV1iKHj6fEtL)
 
@@ -67,6 +67,16 @@ Moving a slot app to the background frees the slot while retaining its task and 
 
 The optional **Park the previous main app when switching** setting moves the previous main app into an empty slot when switching from the app strip. If no empty slot is available, the app switch proceeds normally. It is disabled by default.
 
+#### Recent tasks
+
+- Swipe right from **Controls** to open **Tasks**. Tap a card to restore it in the main window, or long-press and drag it into a slot.
+- Swipe up on a card to close it. Swipe down to toggle its ColorOS background lock.
+- Swipe up with two fingers to clear background tasks. Locked tasks and apps in use in the workspace are preserved.
+
+#### Cross-window sharing
+
+Drag text, images, or files from the main app onto an occupied slot to open the receiving app’s share screen. **Return to the source app after sharing** brings back the original app when the share flow ends. **Block system drag suggestions in the workspace** keeps the ColorOS suggestions bar from taking over the drag.
+
 #### App strip and cloned apps
 
 - **Automatic ordering:** arrange app shortcuts by recent usage; this is the default mode.
@@ -81,15 +91,19 @@ The optional **Park the previous main app when switching** setting moves the pre
 
 These exclusions apply to the four-finger gesture. Other workspace entry points remain available.
 
-#### Media controls
+#### Workspace monitoring
 
-- Display track artwork, title, and artist information from the active system media session, with **previous**, **play/pause**, and **next** controls as supported by the playback app.
-- Tap the artwork, title, or another area outside the playback buttons to open the playback app in the main window. If it occupies a slot, it exchanges with the main window.
-- Use a soft gradient drawn from the track artwork, retaining the colors while paused. With no media session or usable artwork, the card falls back to frosted wallpaper.
+In **Settings → Top content → Workspace monitoring**, choose up to nine of 42 readings and use **Restore defaults** to reset the grid. The defaults cover upload and download speed, free storage, memory usage, CPU and GPU frequency and usage, and battery temperature. Other options include Wi-Fi link rates, cellular signal, cumulative traffic, screen brightness, processor temperatures, and battery cycle count. Availability varies by device and connection.
+
+The panel retains readings across screen lock and refreshes transfer rates shortly after unlock.
+
+#### Jump game
+
+Swipe up or down on the monitoring grid to switch to the jump game. Tap to jump over app icons. The spring scenery scrolls as you play, and the game saves your best score.
 
 #### Control-area video
 
-The control area has a **Video** page alongside **Controls**. Supported floating video windows are detected and displayed automatically, with playback remaining in the source app. The supported sources are system picture-in-picture (PiP) and eligible app-provided floating video windows; OEM freeform windows and secure/protected video are not generally supported.
+The control area has **Tasks**, **Controls**, and **Video** pages. Supported floating video windows are detected and displayed automatically, with playback remaining in the source app. The supported sources are system picture-in-picture (PiP) and eligible app-provided floating video windows; OEM freeform windows and secure/protected video are not generally supported.
 
 1. Start playback in the source app and enable system PiP or the app's own floating video window.
 2. Open the workspace. A supported floating window automatically moves into the **Video** page.
@@ -100,6 +114,8 @@ Tap the embedded video to show compact glass controls. They hide automatically a
 | Control | Behavior |
 |---------|----------|
 | Play / pause | Use the source app's media session or an available native player control. Availability depends on the player. |
+| Seek | Drag the progress slider when the player reports duration, playback position, and seek support. |
+| Open full-screen player | Use the player’s full-screen action when available. |
 | Show full picture / Fill area | Default to uniform scaling with the complete picture centered in both axes. Choose fill explicitly to crop the edges and cover the area. |
 | Return to floating window | Restore the original native window. The return shortcut on **Controls** provides the same action. |
 | Close | Request the source player's own close action when available. |
@@ -215,6 +231,8 @@ These switches are on the **Settings** page; appearance and app ordering are des
 | Swipe slot apps to the background | On | Enable or disable outward swipe dismissal. Dragging a slot to the control area remains available. |
 | Park the previous main app when switching | Off | Move the previous main app into an empty slot when switching from the app strip; switch normally if none is available. |
 | Navigation-button adaptation | Off | Enable for three-button navigation and disable for gesture navigation. Toggle again after changing the system navigation mode. |
+| Block system drag suggestions in the workspace | On | Prevent ColorOS from taking over supported content drags inside the workspace. |
+| Return to the source app after sharing | On | Restore the source app in the main window when the share flow ends. |
 
 ### Architecture
 
@@ -250,11 +268,11 @@ Copyright 2026 lujinxin.
 
 ## 中文
 
-**NeXtep** 是一个 **LSPosed 模块**。它在保留 **ColorOS 16 / 17 原生桌面**的同时，为系统加入**原生侧边工作区**，提供**一个主窗口和三个实时小窗**，并将任务切换、拖动操作、媒体控制和自定义应用快捷方式集成到 SystemUI 中。
+**NeXtep** 是一个 **LSPosed 模块**。它在保留 **ColorOS 16 / 17 原生桌面**的同时，为系统加入**原生侧边工作区**，提供**一个主窗口和三个实时小窗**，并将任务切换、拖动操作、工作区监测和自定义应用快捷方式集成到 SystemUI 中。
 
 本项目主要适配**一加 PLK110**，此前已在 **Android 16 / ColorOS 16** 上验证，近期功能与兼容性验证基于 **Android 17 / ColorOS 17**。项目依赖 Android 和 ColorOS 的私有行为，因此**其他设备、系统版本和厂商桌面需要经过适配**。
 
-**正式分支：2.1.1。** 测试版源码位于 [beta](https://github.com/lujinxin/NeXtep/tree/beta)，已发布的 APK 可从 GitHub Releases 获取。
+**正式分支：2.2.0。** 测试版源码位于 [beta](https://github.com/lujinxin/NeXtep/tree/beta)，已发布的 APK 可从 GitHub Releases 获取。
 
 [下载与更新记录](https://github.com/Xposed-Modules-Repo/io.github.lujinxin.nextep/releases) · [哔哩哔哩演示视频](https://www.bilibili.com/video/BV1iKHj6fEtL)
 
@@ -289,6 +307,16 @@ Copyright 2026 lujinxin.
 
 可选的**“顶栏切换时缩小原应用”**功能，会在点击顶部 App 栏切换应用时，将原主窗口应用放入空小窗；没有空位时正常切换。此功能默认关闭。
 
+#### 最近任务
+
+- 从「功能」页向右滑动进入「任务」页。点击任务卡可在主窗口恢复应用，长按可拖入小窗。
+- 上滑任务卡可关闭任务，下滑可切换 ColorOS 后台锁定状态。
+- 双指向上滑动可清理后台，保留已锁定的任务和工作区内正在使用的应用。
+
+#### 跨窗口拖拽分享
+
+从主窗口把文字、图片或文件拖到已有应用的小窗，松手即可打开接收应用的分享界面。「分享后返回原应用」可在分享流程结束后切回原应用。「工作区内屏蔽系统拖拽推荐」可防止 ColorOS 的推荐栏接管这次拖拽。
+
 #### App 栏与系统分身
 
 - **自动排序**：按最近使用情况排列应用快捷方式，默认使用此模式。
@@ -303,15 +331,19 @@ Copyright 2026 lujinxin.
 
 这些排除设置仅影响四指手势，其他工作区入口仍可使用。
 
-#### 媒体控制
+#### 工作区监测
 
-- 从系统媒体会话中显示歌曲封面、标题和歌手信息，提供**上一首、播放/暂停、下一首**按钮，具体可用操作取决于播放应用。
-- 点击封面、标题等非播放按钮区域，在主窗口打开播放应用；如果播放应用已在小窗中，则与主窗口交换。
-- 有可用封面时，自动生成柔和的封面取色渐变，暂停时保留配色；没有媒体会话或可用封面时，回退到壁纸磨砂背景。
+在 **设置 → 顶部内容 → 工作区监测**中，可从 42 项指标中选择最多 9 项，也可一键恢复默认。默认显示上下行网速、剩余存储、内存占用率、CPU／GPU 频率与占用率，以及电池温度。还可选 Wi-Fi 协商速率、蜂窝信号、累计流量、屏幕亮度、处理器温度、电池循环次数等，具体读数取决于设备和连接状态。
+
+锁屏时面板保留已有读数，解锁后快速补采网速。
+
+#### 图标跳跃小游戏
+
+在顶部监测面板上下滑动即可切换到小游戏。轻点画面，控制 NeXtep 图标越过应用图标障碍。春日风景会随游戏滚动，最高分会自动保存。
 
 #### 控制区视频
 
-控制区包含**“功能”**和**“视频”**两页，可自动识别并接入支持的悬浮视频小窗，播放仍由来源应用负责。接入来源包括系统画中画（PiP）和符合条件的应用自带视频悬浮窗；厂商自由小窗和安全/受保护视频不属于通用支持范围。
+控制区包含「任务」「功能」和「视频」三页，可自动识别并接入支持的悬浮视频小窗，播放仍由来源应用负责。接入来源包括系统画中画（PiP）和符合条件的应用自带视频悬浮窗；厂商自由小窗和安全/受保护视频不属于通用支持范围。
 
 1. 先在来源应用中播放视频，并开启系统画中画或应用自己的悬浮小窗。
 2. 打开工作区，支持的悬浮小窗会自动接入**“视频”**页。
@@ -322,6 +354,8 @@ Copyright 2026 lujinxin.
 | 控件 | 行为 |
 |------|------|
 | 播放/暂停 | 使用来源应用的媒体会话或可用的原生播放控件，是否可用取决于播放器。 |
+| 播放进度 | 播放器提供时长、播放位置和跳转能力时，可拖动进度条。 |
+| 全屏播放器 | 播放器支持时，可打开来源应用的全屏播放器。 |
 | 完整显示/铺满 | 默认等比缩放，在两个方向上居中显示完整画面；手动选择铺满时裁切边缘以覆盖播放区域。 |
 | 返回原小窗 | 恢复原来的原生悬浮窗，功能页的返回快捷按钮提供相同操作。 |
 | 关闭 | 在可用时，请求来源播放器自身执行关闭操作。 |
@@ -437,6 +471,8 @@ settings get global nextep_workspace_active_v1
 | 小窗 App 横滑退到后台 | 开启 | 控制向外侧滑动移入后台；关闭后仍可拖到控制区移入后台。 |
 | 顶栏切换时缩小原应用 | 关闭 | 从顶栏切换应用时，将原主窗口应用移入空小窗；没有空位时正常切换。 |
 | 虚拟按键适配 | 关闭 | 三键导航时开启，手势导航时关闭；更改系统导航方式后，重新开关一次。 |
+| 工作区内屏蔽系统拖拽推荐 | 开启 | 防止系统推荐栏接管工作区内支持的内容拖拽。 |
+| 分享后返回原应用 | 开启 | 分享流程结束后，将原应用换回主窗口。 |
 
 ### 项目架构
 
